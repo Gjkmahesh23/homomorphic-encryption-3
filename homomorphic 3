@@ -1,0 +1,54 @@
+p = 13
+q = 17
+assert p != q
+def is_prime(n):
+  return all(n % i != 0 for i in range(2, n))
+# ---------------------------------
+assert is_prime(p)
+assert is_prime(q)
+import math
+import random
+
+n = p*q
+phi = (p-1)*(q-1)
+assert math.gcd(n, phi) == 1
+def lx(x):
+  y = (x-1)/n
+  assert y - int(y) == 0
+  return int(y)
+
+g = n + 1
+lmbda = phi * 1
+mu = pow(lmbda, -1, n)
+
+def encrypt(m, r):
+  assert math.gcd(r, n) == 1
+  c = ( pow(g, m, n*n) * pow(r, n, n*n) ) % (n*n)
+  return c
+
+def decrypt(c):
+  p = ( lx(pow(c, lmbda, n*n)) * mu ) % n
+  return p
+
+m = 123
+r = random.randint(0, n)
+
+c = encrypt(m, r)
+p = decrypt(c)
+
+print("m :",m)
+print("p :",p)
+
+m1 = 123
+r1 = random.randint(0, n)
+
+m2 = 37
+r2 = random.randint(0, n)
+
+c1 = encrypt(m1, r1)
+c2 = encrypt(m2, r2)
+p1=c1+c2
+P1=decrypt(p1)
+P1=m1+m2
+print("m1+m2 :",m1+m2)
+print("decrypt(c1+c2) :",P1)
